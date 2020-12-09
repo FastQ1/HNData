@@ -8,19 +8,18 @@ public class Comment {
     private final String POSTER;
     private final String TEXT;
     private final int width;
-    //primary key identifier, not to be confused with postID which relates it to a post or commentID which isn't a field
+    //primary key identifier, not to be confused with postID, which relates it to a post, or commentID, which isn't a field
     //but inserts into the database the id field of it's parent comment if there is one
     private int id;
 
-    public Comment(String text, String poster, int width){
-//        int z=10/0;
-        this.TEXT =text;
-        this.POSTER =poster;
-        this.width=width;
+    public Comment(String text, String poster, int width) {
+        this.TEXT = text;
+        this.POSTER = poster;
+        this.width = width;
     }
 
 
-    //returns UNSAFE text
+    //returns UNSAFE text (not parsed for ')
     public String getTEXT() {
         return TEXT;
     }
@@ -28,45 +27,43 @@ public class Comment {
 
     public PreparedStatement getInsertStatement(Connection conn, int id, int postID, Stack<Comment> commentChain)
             throws SQLException, UnexpectedException {
-        this.id=id;
-        int parentCommentID=-1;
+        this.id = id;
+        int parentCommentID = -1;
 
-        //Maintains a stack of comments that mimics the visual representation on the site to relate comments
-        //Only maintains comments that may have a reply to them in the future
-
-        //peek then push happens in all else statements, so can remove the peek/assert/push and drop
-        if(this.width==1){
+        //Maintains a stack of that mimics the visual representation of comments on the site to show parent/child relationships
+        if (this.width == 1) {
             commentChain.clear();
 
-        }else{
-            if (commentChain.peek().width>=this.width){
-                while(commentChain.peek().width>=this.width) commentChain.pop();
-            }else if (commentChain.peek().width!=this.width-1) throw new UnexpectedException("Comments not in expected order. Top of comment chain width: "+commentChain.peek().width+"." +
-                    "this width: "+this.width+". This comment: "+commentChain.peek().getTEXT());
+        } else {
+            if (commentChain.peek().width >= this.width) {
+                while (commentChain.peek().width >= this.width) commentChain.pop();
+            } else if (commentChain.peek().width != this.width - 1)
+                throw new UnexpectedException("Comments not in expected order. Top of comment chain width: " + commentChain.peek().width + "." +
+                        "this width: " + this.width + ". This comment: " + commentChain.peek().getTEXT());
 
-            parentCommentID=commentChain.peek().id;
-            assert parentCommentID!=-1;
+            parentCommentID = commentChain.peek().id;
+            assert parentCommentID != -1;
         }
         commentChain.push(this);
 
 
-        String parsedText= TEXT.replace("'","''");
+        String parsedText = TEXT.replace("'", "''");
 
-        StringBuilder sb=new StringBuilder("INSERT INTO comments(id, postID, posterName, commentText");
+        StringBuilder sb = new StringBuilder("INSERT INTO comments(id, postID, posterName, commentText");
 
-        boolean isParentComment=(parentCommentID==-1);
+        boolean isParentComment = (parentCommentID == -1);
 
-        if(!isParentComment){
+        if (!isParentComment) {
             sb.append(", parentCommentID");
         }
 
-                sb.append(") VALUES (")
-                        .append(id).append(",")
+        sb.append(") VALUES (")
+                .append(id).append(",")
                 .append(postID).append(",")
                 .append("'").append(POSTER).append("'").append(",")
                 .append("'").append(parsedText).append("'");
 
-        if(!isParentComment){
+        if (!isParentComment) {
             sb.append(",").append(parentCommentID);
         }
         sb.append(");\n");
@@ -78,15 +75,15 @@ public class Comment {
     }
 
 
-
     @Override
     public boolean equals(Object obj) {
-        if(obj.getClass()!=this.getClass()) return false;
+        if (obj.getClass() != this.getClass()) return false;
         return this.POSTER.equals(((Comment) obj).POSTER) && this.TEXT.equals(((Comment) obj).TEXT);
     }
 
+    //for debugging
     @Override
     public String toString() {
-        return ((this.width==1? "Parent ": "Child ") +"comment by "+POSTER+":\n"+TEXT);
+        return ((this.width == 1 ? "Parent " : "Child ") + "comment by " + POSTER + ":\n" + TEXT);
     }
 }
