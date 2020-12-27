@@ -175,10 +175,14 @@ public class Post {
                 .append("'").append(parsedTitle).append("'").append(",")
                 .append("'").append(site).append("'").append(",")
                 .append("'").append(poster).append("'").append(",")
-                .append(numVotes).append(",")
-                .append(topRank).append(",")
-                .append("'").append(enterTime).append("'").append(",")
-                .append("'").append(exitTime).append("'").append(",")
+                .append(numVotes).append(",");
+
+                if(topRank==0) sb.append("null,");
+                else sb.append(topRank).append(",");
+                if(enterTime.equals("0")) sb.append("null,");
+                else sb.append("'").append(enterTime).append("'").append(",");
+
+                sb.append("'").append(exitTime).append("'").append(",")
                 .append(numComments).append(",")
                 .append("'").append(articleLink).append("'").append(",")
                 .append("'").append(commentLink).append("'")

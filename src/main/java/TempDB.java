@@ -152,7 +152,7 @@ public class TempDB {
         String poster = post.getPoster();
 
         while (rs.next()) {
-            if (rs.getString(1).equals(title) || rs.getString(2).equals(poster)) {
+            if (rs.getString(1).equals(title) && rs.getString(2).equals(poster)) {
                 isNewPost = false;
                 break;
             }
