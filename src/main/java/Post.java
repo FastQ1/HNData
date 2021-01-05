@@ -158,7 +158,7 @@ public class Post {
     public void update(Post moreRecent) throws IOException {
 
         this.numComments = Math.max(this.numComments, moreRecent.numComments);
-        if (this.topRank != 0) this.topRank = Math.max(this.topRank, moreRecent.topRank);
+        if (this.topRank != 0) this.topRank = Math.min(this.topRank, moreRecent.topRank);
         this.numVotes = Math.max(this.numVotes, moreRecent.numVotes);
         if (this.numComments != 0 && moreRecent.numComments != 0) updateComments();
 

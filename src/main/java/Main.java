@@ -1,4 +1,6 @@
 public class Main {
+    //General philosophy here is fail quick to avoid getting bad data, so exceptions are thrown often and handled sparsely.
+
 
     public static void main(String[] args) throws ClassNotFoundException {
         TempDB.Database db;
