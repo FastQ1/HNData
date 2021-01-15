@@ -33,7 +33,7 @@ public class TempDB {
     enum Database {
         MSSQLSERVER,
         SQLITE_HOME,
-        SQLITE_VM
+//        SQLITE_VM
     }
 
     //Unnecessary singleton

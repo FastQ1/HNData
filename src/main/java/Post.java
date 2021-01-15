@@ -177,10 +177,12 @@ public class Post {
                 .append("'").append(poster).append("'").append(",")
                 .append(numVotes).append(",");
 
-                if(topRank==0) sb.append("null,");
-                else sb.append(topRank).append(",");
-                if(enterTime.equals("0")) sb.append("null,");
-                else sb.append("'").append(enterTime).append("'").append(",");
+//                if(topRank==0) sb.append("null,");
+//                else
+                sb.append(topRank).append(",");
+//                if(enterTime.equals("0")) sb.append("null,");
+//                else
+                sb.append("'").append(enterTime).append("'").append(",");
 
                 sb.append("'").append(exitTime).append("'").append(",")
                 .append(numComments).append(",")
