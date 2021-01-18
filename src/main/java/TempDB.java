@@ -3,8 +3,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.rmi.UnexpectedException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +46,11 @@ public class TempDB {
     }
 
 
-    private TempDB(Database db) throws SQLException, UnexpectedException {
+    private TempDB(Database db) throws SQLException {
         if (db.equals(Database.MSSQLSERVER)) CONNECTION_STRING = ConnectionVariables.getSqlServerConnectionString();
         else if (db.equals(Database.SQLITE_HOME))
             CONNECTION_STRING = ConnectionVariables.getSqliteHomeConnectionString();
-        else throw new UnexpectedException("Connection enum not as expected");
+        else throw new IllegalStateException("Connection enum not as expected");
 
         logger = new Logger(CONNECTION_STRING);
 
